@@ -2,7 +2,6 @@
 <section id="main">
 
 	<h1>Add Computer</h1>
-	
 	<form action="addComputer.jsp" method="POST">
 		<fieldset>
 			<div class="clearfix">

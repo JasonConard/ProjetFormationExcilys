@@ -1,7 +1,8 @@
 <jsp:include page="include/header.jsp" />
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 
 <section id="main">
-	<h1 id="homeTitle">456 Computers found</h1>
+	<h1 id="homeTitle">${nbComputer} Computers found</h1>
 	<div id="actions">
 		<form action="" method="GET">
 			<input type="search" id="searchbox" name="search"
@@ -27,8 +28,16 @@
 				</tr>
 			</thead>
 			<tbody>
+				<c:forEach var="entry" items="${allComputer}">
+					<tr>
+						<td>${entry.name}</td>
+						<td>${entry.introduced}</td>
+						<td>${entry.discontinued}</td>
+						<td>${entry.company.name}</td>
+					</tr>
+				</c:forEach>
 
-				<tr>
+				<!-- <tr>
 					<td><a href="#" onclick="">ThinkPad T420</a></td>
 					<td>2011-01-01</td>
 					<td>2013-03-04</td>
@@ -45,7 +54,7 @@
 					<td>2005-05-09</td>
 					<td>2008-06-06</td>
 					<td>Apple</td>
-				</tr>
+				</tr> -->
 			</tbody>
 		</table>
 </section>

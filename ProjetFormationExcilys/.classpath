@@ -9,11 +9,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/home/excilys/Téléchargements/mysql-connector-java-5.1.29/mysql-connector-java-5.1.29-bin.jar"/>
-	<classpathentry kind="lib" path="/home/excilys/Téléchargements/mysql-connector-java-5.1.29/src/lib/c3p0-0.9.1-pre6.jar"/>
-	<classpathentry kind="lib" path="/home/excilys/Téléchargements/mysql-connector-java-5.1.29/src/lib/c3p0-0.9.1-pre6.src.zip"/>
-	<classpathentry kind="lib" path="/home/excilys/Téléchargements/mysql-connector-java-5.1.29/src/lib/jboss-common-jdbc-wrapper.jar"/>
-	<classpathentry kind="lib" path="/home/excilys/Téléchargements/mysql-connector-java-5.1.29/src/lib/jboss-common-jdbc-wrapper-src.jar"/>
-	<classpathentry kind="lib" path="/home/excilys/Téléchargements/mysql-connector-java-5.1.29/src/lib/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="/home/excilys/Documents/Cours/Dropbox/Excilys/training-computer-database-template-master/ProjetFormationExcilys/ProjetFormationExcilys/WebContent/WEB-INF/lib/mysql-connector-java-5.1.29-bin.jar"/>
+	<classpathentry kind="lib" path="/home/excilys/Documents/Cours/Dropbox/Excilys/training-computer-database-template-master/ProjetFormationExcilys/ProjetFormationExcilys/WebContent/WEB-INF/lib/slf4j-api-1.7.6.jar"/>
+	<classpathentry kind="lib" path="/home/excilys/Documents/Cours/Dropbox/Excilys/training-computer-database-template-master/ProjetFormationExcilys/ProjetFormationExcilys/WebContent/WEB-INF/lib/jstl-1.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

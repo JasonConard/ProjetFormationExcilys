@@ -1,6 +1,8 @@
 package Entity;
 import java.sql.Date;
 
+import DAO.ComputerDAO;
+
 public class Computer {
 	private int id;
 	private String name;
@@ -8,6 +10,9 @@ public class Computer {
 	private Date discontinued;
 	private int company_id;
 	
+	private Company company = null;
+	
+
 	public Computer(int id, String name, Date introduced, Date discontinued,
 			int company_id) {
 		super();
@@ -16,6 +21,18 @@ public class Computer {
 		this.introduced = introduced;
 		this.discontinued = discontinued;
 		this.company_id = company_id;
+	}
+	
+	public Computer(int id, String name, Date introduced, Date discontinued,
+			int company_id, String companyName) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.introduced = introduced;
+		this.discontinued = discontinued;
+		this.company_id = company_id;
+		
+		company = new Company(company_id, companyName);
 	}
 
 	public int getId() {
@@ -56,6 +73,14 @@ public class Computer {
 
 	public void setCompany_id(int company_id) {
 		this.company_id = company_id;
+	}
+	
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 	
 	public String toString(){

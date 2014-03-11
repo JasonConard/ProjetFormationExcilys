@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
 import java.sql.PreparedStatement;
 
 import Entity.Company;
@@ -32,8 +31,14 @@ public class CompanyDAO {
 				String name = results.getString("name");
 				alc.add(new Company(id,name));
 			}
+			results.close();
+			stmt.close();
 		} catch (SQLException e) {
 			System.out.println("SQL query problem : "+query);
+		} finally{
+			try {
+				con.close();
+			} catch (SQLException e) {}
 		}
 		
 		return alc;
@@ -49,7 +54,14 @@ public class CompanyDAO {
 			ps.setInt(1, c.getId());
 			ps.setString(2, c.getName());
 			ps.executeUpdate();
-		}catch(Exception e){}
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println("SQL query problem : "+query);
+		} finally{
+			try {
+				con.close();
+			} catch (SQLException e) {}
+		}
 	}
 	
 	synchronized public static CompanyDAO getInstance(){
@@ -58,4 +70,5 @@ public class CompanyDAO {
 		}
 		return _instance;
 	}
+	
 }
