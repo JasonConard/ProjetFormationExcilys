@@ -8,10 +8,12 @@
 			<attribute name="owner.project.facets" value="jst.web"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java-6-openjdk-amd64">
-		<attributes>
-			<attribute name="owner.project.facets" value="java"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/home/excilys/Téléchargements/mysql-connector-java-5.1.29/mysql-connector-java-5.1.29-bin.jar"/>
+	<classpathentry kind="lib" path="/home/excilys/Téléchargements/mysql-connector-java-5.1.29/src/lib/c3p0-0.9.1-pre6.jar"/>
+	<classpathentry kind="lib" path="/home/excilys/Téléchargements/mysql-connector-java-5.1.29/src/lib/c3p0-0.9.1-pre6.src.zip"/>
+	<classpathentry kind="lib" path="/home/excilys/Téléchargements/mysql-connector-java-5.1.29/src/lib/jboss-common-jdbc-wrapper.jar"/>
+	<classpathentry kind="lib" path="/home/excilys/Téléchargements/mysql-connector-java-5.1.29/src/lib/jboss-common-jdbc-wrapper-src.jar"/>
+	<classpathentry kind="lib" path="/home/excilys/Téléchargements/mysql-connector-java-5.1.29/src/lib/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

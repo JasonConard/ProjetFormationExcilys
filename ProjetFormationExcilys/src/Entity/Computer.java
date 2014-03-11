@@ -57,5 +57,11 @@ public class Computer {
 	public void setCompany_id(int company_id) {
 		this.company_id = company_id;
 	}
+	
+	public String toString(){
+		return "(id: "+id+", name: "+name+", "
+				+ "introduced: "+introduced+", discontinued: "+discontinued+", "
+						+ "company_id:"+company_id+")";
+	}
 		
 }
