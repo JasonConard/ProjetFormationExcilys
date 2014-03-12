@@ -66,6 +66,36 @@ public class CompanyDAO {
 		}
 	}
 	
+	public Company retrieveByCompanyId(long idCompany){
+		Connection con = ConnectionManager.getConnection();
+		
+		Company company = null;
+		
+		String query = "SELECT ca.* FROM company AS ca WHERE ca.id = "+idCompany;
+		ResultSet results;
+		Statement stmt;
+		
+		try {
+			stmt = con.createStatement();
+			results = stmt.executeQuery(query);
+			if(results.next()){
+				long id = results.getLong("id");
+				String name = results.getString("name");
+				company = new Company(id,name);
+			}
+			results.close();
+			stmt.close();
+		} catch (SQLException e) {
+			System.out.println("SQL query problem : "+query);
+		} finally{
+			try {
+				con.close();
+			} catch (SQLException e) {}
+		}
+		
+		return company;
+	}
+	
 	synchronized public static CompanyDAO getInstance(){
 		if(instance == null){
 			instance = new CompanyDAO();

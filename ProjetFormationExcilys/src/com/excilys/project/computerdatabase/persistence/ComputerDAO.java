@@ -139,9 +139,21 @@ public class ComputerDAO {
 		try{
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setLong(1, c.getId());
+			
 			ps.setString(2, c.getName());
-			ps.setDate(3, (java.sql.Date) c.getIntroduced());
-			ps.setDate(4, (java.sql.Date) c.getDiscontinued());
+			
+			if(c.getIntroduced()!=null){
+				ps.setDate(3,  new java.sql.Date(c.getIntroduced().getTime()));
+			}else{
+				ps.setNull(3, Types.TIMESTAMP);
+			}
+			
+			if(c.getDiscontinued()!=null){
+				ps.setDate(4, new java.sql.Date(c.getDiscontinued().getTime()));
+			}else{
+				ps.setNull(4, Types.TIMESTAMP);
+			}
+			
 			if(c.getCompany() != null){
 				ps.setLong(5, c.getCompany().getId());
 			}else{
@@ -157,7 +169,6 @@ public class ComputerDAO {
 				con.close();
 			} catch (SQLException e) {}
 		}
-		
 	}
 	
 	public Company selectCompanyByComputerId(long idComputer){
@@ -188,6 +199,27 @@ public class ComputerDAO {
 		}
 		
 		return company;
+	}
+	
+
+	public void delete(long id) {
+		Connection con = ConnectionManager.getConnection();
+		
+		String query = "DELETE FROM "+table+" WHERE id = ?";
+		
+		try{
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setLong(1, id);
+				
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println("SQL query problem : "+query);
+		} finally{
+			try {
+				con.close();
+			} catch (SQLException e) {}
+		}
 	}
 	
 	synchronized public static ComputerDAO getInstance(){

@@ -6,11 +6,11 @@
 <title>EPF Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="css/bootstrap.css" rel="stylesheet" media="screen">
 <link href="css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
-	<header class="topbar">
+	<header class="navbar navbar-inverse navbar-fixed-top">
 		<h1 class="fill">
 			<a href="DashBoard"> Application - Computer Database </a>
 		</h1>

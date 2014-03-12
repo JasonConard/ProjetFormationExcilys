@@ -9,12 +9,12 @@
 				value="" placeholder="Search name">
 			<input type="submit" id="searchsubmit"
 				value="Filter by name"
-				class="btn primary">
+				class="btn btn-primary">
 		</form>
-		<a class="btn success" id="add" href="addComputer.jsp">Add Computer</a>
+		<a class="btn btn-success" id="add" href="AddComputer">Add Computer</a>
 	</div>
-
-		<table class="computers zebra-striped">
+	<br/>
+		<table class="computers table table-striped table-bordered">
 			<thead>
 				<tr>
 					<!-- Variable declarations for passing labels as parameters -->
@@ -25,6 +25,7 @@
 					<th>Discontinued Date</th>
 					<!-- Table header for Company -->
 					<th>Company</th>
+					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -34,27 +35,13 @@
 						<td>${entry.introduced}</td>
 						<td>${entry.discontinued}</td>
 						<td>${entry.company.name}</td>
+						<td>
+							<a href="EditComputer?computer=${entry.id}"><span class="glyphicon glyphicon-pencil"></span></a>
+							<a href="DashBoard?computer=${entry.id}&delete=delete"><span class="glyphicon glyphicon-trash"></span></a>
+						</td>
+						
 					</tr>
 				</c:forEach>
-
-				<!-- <tr>
-					<td><a href="#" onclick="">ThinkPad T420</a></td>
-					<td>2011-01-01</td>
-					<td>2013-03-04</td>
-					<td>Lenovo</td>
-				</tr>
-				<tr>
-					<td><a href="#">Precision 3500</a></td>
-					<td>2010-05-07</td>
-					<td>2012-06-01</td>
-					<td>Dell</td>
-				</tr>
-				<tr>
-					<td><a href="#">Macbook Air</a></td>
-					<td>2005-05-09</td>
-					<td>2008-06-06</td>
-					<td>Apple</td>
-				</tr> -->
 			</tbody>
 		</table>
 </section>

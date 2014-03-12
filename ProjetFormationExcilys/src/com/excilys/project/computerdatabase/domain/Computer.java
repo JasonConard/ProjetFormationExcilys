@@ -12,26 +12,37 @@ public class Computer {
 	
 
 	public Computer(long id, String name, Date introduced, Date discontinued,
-			long company_id) {
+			long companyId) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
 		
-		company = new Company(company_id, "");
+		company = new Company(companyId, "");
 	}
 	
 	public Computer(long id, String name, Date introduced, Date discontinued,
-			long company_id, String companyName) {
+			long companyId, String companyName) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
 		
-		company = new Company(company_id, companyName);
+		company = new Company(companyId, companyName);
 	}
+	
+	public Computer(long id, String name, Date introduced, Date discontinued,
+			Company company) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.introduced = introduced;
+		this.discontinued = discontinued;
+		this.company = company;
+	}
+
 
 	public long getId() {
 		return id;

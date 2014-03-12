@@ -71,3 +71,15 @@ table.computers .header a {
 .col5 {
 	width: 30%;
 }
+
+.date-form{
+	width: 200px;
+}
+
+.text-form{
+	width: 300px;
+}
+
+.select-form{
+	width: 400px;
+}
