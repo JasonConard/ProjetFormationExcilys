@@ -37,14 +37,32 @@ public class DashBoard extends HttpServlet {
 			computerDao.delete(id);
 		}
 		
+		String order = request.getParameter("order");
+		String visibleOrder = order;
+		if(order == null || order.length()==0){
+			order = "cu.name";
+			visibleOrder = "name";
+		}else if(order.equals("company")){
+			order = "ca.name";
+		}else{
+			order = "cu."+order;
+		}
+		request.setAttribute("order", visibleOrder);
+		String dir = request.getParameter("dir");
+		if(dir == null || dir.length()==0){
+			dir = "DESC";
+		}
+		request.setAttribute("dir", dir);
+		
+		
 		/* Searching managment */
 		String search = request.getParameter("search");
 		List<Computer> allComputer = null;
 		if(search == null || search.length()==0){
-			allComputer = computerDao.selectAllComputerWithCompanyName();
+			allComputer = computerDao.retrieveAllWithCompanyNameOrderBy(order, dir);
 			request.setAttribute("search", "");
 		}else{
-			allComputer = computerDao.selectAllComputerWithCompanyNameLike(search);
+			allComputer = computerDao.retrieveAllWithCompanyNameLikeOrder(search, order, dir);
 			request.setAttribute("search", search);
 		}
 		//System.out.println(allComputer);
@@ -59,7 +77,7 @@ public class DashBoard extends HttpServlet {
 			idPage = Integer.parseInt(idPageString);
 		}
 		
-		int nbLinePerPages = 10;
+		int nbLinePerPages = 30;
 		int nbPage = allComputer.size()/nbLinePerPages +1;
 		int indLineMin = (idPage-1)*nbLinePerPages;
 		int indLineMax = indLineMin+nbLinePerPages-1;
