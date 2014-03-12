@@ -31,7 +31,7 @@ public class DashBoard extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String search = request.getParameter("search");
 		List<Computer> allComputer = null;
-		if(search.length()==0 || search == null){
+		if(search == null || search.length()==0){
 			allComputer = cdao.selectAllComputerWithCompanyName();
 		}else{
 			allComputer = cdao.selectAllComputerWithCompanyNameLike(search);
