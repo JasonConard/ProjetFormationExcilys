@@ -12,10 +12,20 @@
     <description></description>
     <display-name>DashBoard</display-name>
     <servlet-name>DashBoard</servlet-name>
-    <servlet-class>com.excilys.project.computerDatabase.servlets.DashBoard</servlet-class>
+    <servlet-class>com.excilys.project.computerdatabase.controller.DashBoard</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>DashBoard</servlet-name>
     <url-pattern>/DashBoard</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AddComputer</display-name>
+    <servlet-name>AddComputer</servlet-name>
+    <servlet-class>com.excilys.project.computerdatabase.controller.AddComputer</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddComputer</servlet-name>
+    <url-pattern>/AddComputer</url-pattern>
   </servlet-mapping>
 </web-app>

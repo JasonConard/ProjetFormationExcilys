@@ -1,6 +1,4 @@
-import com.excilys.project.computerDatabase.dao.ComputerDAO;
-import com.excilys.project.computerDatabase.domain.Company;
-
+import com.excilys.project.computerdatabase.persistence.ComputerDAO;
 
 public class Test {
 	public static void main(String[] args){
