@@ -1,4 +1,4 @@
-package Servlets;
+package com.excilys.project.computerDatabase.servlets;
 
 
 import java.io.IOException;
@@ -9,29 +9,36 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import DAO.ComputerDAO;
-import Entity.Computer;
+import com.excilys.project.computerDatabase.dao.ComputerDAO;
+import com.excilys.project.computerDatabase.domain.Computer;
 
 /**
  * Servlet implementation class MaServletTest
  */
 public class DashBoard extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public DashBoard() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public DashBoard() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ComputerDAO cdao = ComputerDAO.getInstance();
-		ArrayList<Computer> allComputer = cdao.selectAllComputerWithCompanyName();
+		String req = request.getParameter("search");
+		ArrayList<Computer> allComputer = null;
+		if(req == null){
+			ComputerDAO cdao = ComputerDAO.getInstance();
+			allComputer = cdao.selectAllComputerWithCompanyName();
+		}else{
+			ComputerDAO cdao = ComputerDAO.getInstance();
+			allComputer = cdao.selectAllComputerWithCompanyNameLike(req);
+		}
 		//System.out.println(allComputer);
 		request.setAttribute("allComputer", allComputer);
 		request.setAttribute("nbComputer", allComputer.size());
@@ -42,7 +49,7 @@ public class DashBoard extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
 	}
 
 }

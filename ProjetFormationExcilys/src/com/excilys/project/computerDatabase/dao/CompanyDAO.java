@@ -1,4 +1,4 @@
-package DAO;
+package com.excilys.project.computerDatabase.dao;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,7 +6,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.sql.PreparedStatement;
 
-import Entity.Company;
+import com.excilys.project.computerDatabase.domain.Company;
 
 public class CompanyDAO {
 	

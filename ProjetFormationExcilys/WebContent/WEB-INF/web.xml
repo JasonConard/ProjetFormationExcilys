@@ -12,7 +12,7 @@
     <description></description>
     <display-name>DashBoard</display-name>
     <servlet-name>DashBoard</servlet-name>
-    <servlet-class>Servlets.DashBoard</servlet-class>
+    <servlet-class>com.excilys.project.computerDatabase.servlets.DashBoard</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>DashBoard</servlet-name>

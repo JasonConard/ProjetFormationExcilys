@@ -1,5 +1,5 @@
-import DAO.ComputerDAO;
-import Entity.Company;
+import com.excilys.project.computerDatabase.dao.ComputerDAO;
+import com.excilys.project.computerDatabase.domain.Company;
 
 
 public class Test {

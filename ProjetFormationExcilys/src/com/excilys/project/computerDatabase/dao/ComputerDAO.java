@@ -1,4 +1,4 @@
-package DAO;
+package com.excilys.project.computerDatabase.dao;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -7,8 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.sql.PreparedStatement;
 
-import Entity.Company;
-import Entity.Computer;
+import com.excilys.project.computerDatabase.domain.Company;
+import com.excilys.project.computerDatabase.domain.Computer;
 public class ComputerDAO {
 	
 	private static final String table = "computer";
@@ -54,10 +54,7 @@ public class ComputerDAO {
 		ArrayList<Computer> alc = new ArrayList<Computer>();
 		
 		String query = "SELECT cu.*, ca.name AS name2 FROM company AS ca "
-				+ "LEFT OUTER JOIN computer AS cu ON cu.company_id = ca.id "
-				+ "UNION "
-				+ "SELECT cu.*, ca.name AS name2 FROM company AS ca "
-				+ "RIGHT OUTER JOIN computer AS cu ON cu.company_id = ca.id";
+				+ "RIGHT OUTER JOIN computer AS cu ON cu.company_id = ca.id ";
 		ResultSet results;
 		Statement stmt;
 		
@@ -83,6 +80,42 @@ public class ComputerDAO {
 			} catch (SQLException e) {}
 		}
 		
+		return alc;
+	}
+	
+	public ArrayList<Computer> selectAllComputerWithCompanyNameLike(String like){
+		Connection con = ConnectionManager.getConnection();
+		
+		ArrayList<Computer> alc = new ArrayList<Computer>();
+		
+		String query = "SELECT cu.*, ca.name AS name2 FROM company AS ca "
+				+ "RIGHT OUTER JOIN computer AS cu ON cu.company_id = ca.id "
+				+ "WHERE cu.name LIKE '%"+like+"%' OR ca.name LIKE '%"+like+"%'";
+		ResultSet results;
+		Statement stmt;
+		
+		try {
+			stmt = con.createStatement();
+			results = stmt.executeQuery(query);
+			while(results.next()){
+				int id = results.getInt("id");
+				String name = results.getString("name");
+				Date introduced = results.getDate("introduced");
+				Date discontinued = results.getDate("discontinued");
+				int company_id = results.getInt("company_id");
+				String companyName = results.getString("name2");
+				alc.add(new Computer(id,name,introduced,discontinued,company_id, companyName));
+			}
+			results.close();
+			stmt.close();
+		} catch (SQLException e) {
+			System.out.println("SQL query problem : "+query);
+		} finally{
+			try {
+				con.close();
+			} catch (SQLException e) {}
+		}
+
 		return alc;
 	}
 	

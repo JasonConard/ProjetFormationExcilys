@@ -1,7 +1,5 @@
-package Entity;
+package com.excilys.project.computerDatabase.domain;
 import java.sql.Date;
-
-import DAO.ComputerDAO;
 
 public class Computer {
 	private int id;

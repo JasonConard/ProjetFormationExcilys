@@ -1,4 +1,4 @@
-package Entity;
+package com.excilys.project.computerDatabase.domain;
 
 public class Company {
 	private int id;
