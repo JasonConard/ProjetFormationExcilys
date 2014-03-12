@@ -36,8 +36,8 @@
 						<td>${entry.discontinued}</td>
 						<td>${entry.company.name}</td>
 						<td>
-							<a href="EditComputer?computer=${entry.id}"><span class="glyphicon glyphicon-pencil"></span></a>
-							<a href="DashBoard?computer=${entry.id}&delete=delete"><span class="glyphicon glyphicon-trash"></span></a>
+							<a href="EditComputer?computerId=${entry.id}"><span class="glyphicon glyphicon-pencil"></span></a>
+							<a href="DashBoard?computerId=${entry.id}&delete=delete"><span class="glyphicon glyphicon-trash"></span></a>
 						</td>
 						
 					</tr>

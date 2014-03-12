@@ -18,7 +18,7 @@ import com.excilys.project.computerdatabase.persistence.ComputerDAO;
 /**
  * Servlet implementation class AddComputer
  */
-public class AddComputer extends HttpServlet {
+public class EditComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	CompanyDAO companyDao = CompanyDAO.getInstance();
@@ -26,7 +26,7 @@ public class AddComputer extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AddComputer() {
+    public EditComputer() {
         super();
     }
 
@@ -34,16 +34,33 @@ public class AddComputer extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String idString = request.getParameter("computerId");
+		
+		if(idString != null && idString.length()>0){
+			long id = Long.parseLong(idString);
+			Computer computer = computerDao.retrieveByComputerId(id);
+			if(computer!=null){
+				request.setAttribute("computer",computer);
+			}
+		}
+		
 		List<Company> allCompany = null;
 		allCompany = companyDao.selectAllCompany();
 		request.setAttribute("allCompany", allCompany);
-		request.getRequestDispatcher("addComputer.jsp").forward(request, response);
+		request.getRequestDispatcher("editComputer.jsp").forward(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// Searching for all companies		
+		List<Company> allCompany = null;
+		allCompany = companyDao.selectAllCompany();
+		request.setAttribute("allCompany", allCompany);
+		
+		// Parameters searching
+		String idString = request.getParameter("idComputer");
 		String name = request.getParameter("name");
 		String introducedDateString =  request.getParameter("introducedDate");
 		String discontinuedDateString =  request.getParameter("discontinuedDate");
@@ -55,6 +72,8 @@ public class AddComputer extends HttpServlet {
 		
 		long companyId = Long.parseLong(companyIdString);
 		company = companyDao.retrieveByCompanyId(companyId);
+		
+		long id = Long.parseLong(idString);
 		
 		String error = ""; 
 		if(introducedDateString!=null && introducedDateString.length()>0){
@@ -72,25 +91,28 @@ public class AddComputer extends HttpServlet {
 		
 		if( name!=null && name.length()>0 ){
 			if(error.length()==0){
-				Computer computer = new Computer(0,name,introducedDate,discontinuedDate,company);
-				computerDao.insertComputer(computer);
-				String message = "Computer Added";
+				Computer computer = new Computer(id,name,introducedDate,discontinuedDate,company);
+				computerDao.updateComputer(computer);
+				String message = "Computer modified";
 				request.setAttribute("message", message);
 			}
 		}else{
 			error += "Computer name is required.";
-			
 		}
 		
 		if(error.length()>0){
 			request.setAttribute("error", error);
 		}
 		
-		List<Company> allCompanies = null;
-		allCompanies = companyDao.selectAllCompany();
-		request.setAttribute("allCompany", allCompanies);
+		if(idString != null && idString.length()>0){
+			long idRetrieve = Long.parseLong(idString);
+			Computer computer = computerDao.retrieveByComputerId(idRetrieve);
+			if(computer!=null){
+				request.setAttribute("computer",computer);
+			}
+		}
 		
-		request.getRequestDispatcher("addComputer.jsp").forward(request, response);
+		request.getRequestDispatcher("editComputer.jsp").forward(request, response);
 	}
 
 }

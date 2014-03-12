@@ -30,7 +30,7 @@ public class DashBoard extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		/* Deleting managment */
-		String idString = request.getParameter("computer");
+		String idString = request.getParameter("computerId");
 		String delete = request.getParameter("delete");
 		if(idString != null && delete!=null && delete.equals("delete")){
 			long id = Long.parseLong(idString);

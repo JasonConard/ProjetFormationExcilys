@@ -51,17 +51,6 @@ public class ComputerDAO {
 		return alc;
 	}
 	
-	private void closeAll(ResultSet rs,PreparedStatement ps, Connection c){
-		try {
-			rs.close();
-			ps.close();
-			c.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
 	public List<Computer> selectAllComputerWithCompanyName(){
 		Connection con = ConnectionManager.getConnection();
 		
@@ -227,5 +216,99 @@ public class ComputerDAO {
 			instance = new ComputerDAO();
 		}
 		return instance;
+	}
+
+	public Computer retrieveByComputerId(long idComputer) {
+		Connection con = ConnectionManager.getConnection();
+		
+		Computer computer = null;
+		
+		String query = "SELECT cu.*, ca.name AS name2 FROM company AS ca "
+				+ "RIGHT OUTER JOIN computer AS cu ON cu.company_id = ca.id "
+				+ "WHERE cu.id = ?";
+		
+		ResultSet results = null;
+		PreparedStatement preparedStatement = null;
+		
+		try {
+			preparedStatement = con.prepareStatement(query);
+			preparedStatement.setLong(1, idComputer);
+			results = preparedStatement.executeQuery();
+			if(results.next()){
+				long id = results.getLong("id");
+				String name = results.getString("name");
+				Date introduced = results.getDate("introduced");
+				Date discontinued = results.getDate("discontinued");
+				long companyId = results.getLong("company_id");
+				String companyName = results.getString("name2");
+				computer = new Computer(id,name,introduced,discontinued,companyId,companyName);
+			}
+		} catch (SQLException e) {
+			System.err.println("SQL query problem : "+query);
+		} finally{
+			closeAll(results, preparedStatement, con);
+		}
+		
+		return computer;
+	}
+
+	public void updateComputer(Computer c) {
+		Connection con = ConnectionManager.getConnection();
+		
+		ResultSet results = null;
+		PreparedStatement preparedStatement = null;
+		
+		String query = "UPDATE "+table+" SET name=?, introduced=?, discontinued=?, company_id=? WHERE id = ?";
+		try{
+			
+			
+			preparedStatement = con.prepareStatement(query);
+			
+			preparedStatement.setString(1, c.getName());
+			
+			if(c.getIntroduced()!=null){
+				preparedStatement.setDate(2,  new java.sql.Date(c.getIntroduced().getTime()));
+			}else{
+				preparedStatement.setNull(2, Types.TIMESTAMP);
+			}
+			
+			if(c.getDiscontinued()!=null){
+				preparedStatement.setDate(3, new java.sql.Date(c.getDiscontinued().getTime()));
+			}else{
+				preparedStatement.setNull(3, Types.TIMESTAMP);
+			}
+			
+			if(c.getCompany() != null){
+				preparedStatement.setLong(4, c.getCompany().getId());
+			}else{
+				preparedStatement.setNull(4, Types.BIGINT);
+			}
+			
+			preparedStatement.setLong(5, c.getId());
+			
+			preparedStatement.executeUpdate();
+			
+		} catch (SQLException e) {
+			System.out.println("SQL query problem : "+query);
+		} finally{
+			closeAll(results, preparedStatement, con);
+		}
+	}
+	
+	private void closeAll(ResultSet rs,PreparedStatement ps, Connection c){
+		try {
+			if(rs!=null){
+				rs.close();
+			}
+			if(ps!=null){
+				ps.close();
+			}
+			if(c!=null){
+				c.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }
