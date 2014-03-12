@@ -4,7 +4,7 @@
 <section id="main">
 
 	<h1>Edit Computer</h1>
-	<form action="EditComputer" class="form-inline" method="POST">
+	<form action="EditComputer" class="form-inline" method="POST" id="editComputerForm">
 		<input type="hidden" name="idComputer" value="${computer.id}"/>
 		<fieldset>
 			<div class="clearfix">

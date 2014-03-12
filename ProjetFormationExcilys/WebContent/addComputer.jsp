@@ -4,7 +4,7 @@
 <section id="main">
 
 	<h1>Add Computer</h1>
-	<form action="AddComputer" class="form-inline" method="POST">
+	<form action="AddComputer" class="form-inline" id="addComputerForm" method="POST">
 		<fieldset>
 			<div class="clearfix">
 				<label for="name">Computer name:</label>

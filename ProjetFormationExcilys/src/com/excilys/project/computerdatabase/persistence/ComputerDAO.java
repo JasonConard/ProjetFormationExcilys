@@ -84,6 +84,40 @@ public class ComputerDAO {
 		return alc;
 	}
 	
+	public List<Computer> retrieveAllWithCompanyNameOrderBy(String order, String direction){
+		Connection con = ConnectionManager.getConnection();
+		
+		List<Computer> alc = new ArrayList<Computer>();
+		
+		String query = "SELECT cu.*, ca.name AS name2 FROM company AS ca "
+				+ "RIGHT OUTER JOIN computer AS cu ON cu.company_id = ca.id "
+				+ "ORDER BY "+ order + " "+direction;
+		ResultSet results = null;
+		PreparedStatement preparedStatement = null;
+		
+		try {
+			preparedStatement = con.prepareStatement(query);
+			results = preparedStatement.executeQuery();
+			while(results.next()){
+				long id = results.getLong("id");
+				String name = results.getString("name");
+				Date introduced = results.getDate("introduced");
+				Date discontinued = results.getDate("discontinued");
+				long companyId = results.getLong("company_id");
+				String companyName = results.getString("name2");
+				alc.add(new Computer(id,name,introduced,discontinued,companyId,companyName));
+			}
+			results.close();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			System.err.println("SQL query problem : "+query);
+		} finally{
+			closeAll(results, preparedStatement, con);
+		}
+		
+		return alc;
+	}
+	
 	public List<Computer> selectAllComputerWithCompanyNameLike(String like){
 		Connection con = ConnectionManager.getConnection();
 		
@@ -92,6 +126,43 @@ public class ComputerDAO {
 		String query = "SELECT cu.*, ca.name AS name2 FROM company AS ca "
 				+ "RIGHT OUTER JOIN computer AS cu ON cu.company_id = ca.id "
 				+ "WHERE cu.name LIKE '%"+like+"%' OR ca.name LIKE '%"+like+"%'";
+		ResultSet results;
+		Statement stmt;
+		
+		try {
+			stmt = con.createStatement();
+			results = stmt.executeQuery(query);
+			while(results.next()){
+				long id = results.getLong("id");
+				String name = results.getString("name");
+				Date introduced = results.getDate("introduced");
+				Date discontinued = results.getDate("discontinued");
+				long companyId = results.getLong("company_id");
+				String companyName = results.getString("name2");
+				alc.add(new Computer(id,name,introduced,discontinued,companyId,companyName));
+			}
+			results.close();
+			stmt.close();
+		} catch (SQLException e) {
+			System.out.println("SQL query problem : "+query);
+		} finally{
+			try {
+				con.close();
+			} catch (SQLException e) {}
+		}
+
+		return alc;
+	}
+	
+	public List<Computer> retrieveAllWithCompanyNameLikeOrder(String like, String order, String direction){
+		Connection con = ConnectionManager.getConnection();
+		
+		List<Computer> alc = new ArrayList<Computer>();
+		
+		String query = "SELECT cu.*, ca.name AS name2 FROM company AS ca "
+				+ "RIGHT OUTER JOIN computer AS cu ON cu.company_id = ca.id "
+				+ "WHERE cu.name LIKE '%"+like+"%' OR ca.name LIKE '%"+like+"%'"
+				+ "ORDER BY "+ order + " "+direction;
 		ResultSet results;
 		Statement stmt;
 		

@@ -28,7 +28,7 @@ public class DashBoard extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		/* Deleting managment */
 		String idString = request.getParameter("computerId");
 		String delete = request.getParameter("delete");
@@ -42,12 +42,45 @@ public class DashBoard extends HttpServlet {
 		List<Computer> allComputer = null;
 		if(search == null || search.length()==0){
 			allComputer = computerDao.selectAllComputerWithCompanyName();
+			request.setAttribute("search", "");
 		}else{
 			allComputer = computerDao.selectAllComputerWithCompanyNameLike(search);
+			request.setAttribute("search", search);
 		}
 		//System.out.println(allComputer);
 		request.setAttribute("allComputer", allComputer);
 		request.setAttribute("nbComputer", allComputer.size());
+		
+		
+		
+		String idPageString = request.getParameter("page");
+		int idPage = 1;
+		if(idPageString != null && idPageString.length() != 0){
+			idPage = Integer.parseInt(idPageString);
+		}
+		
+		int nbLinePerPages = 10;
+		int nbPage = allComputer.size()/nbLinePerPages +1;
+		int indLineMin = (idPage-1)*nbLinePerPages;
+		int indLineMax = indLineMin+nbLinePerPages-1;
+		
+		request.setAttribute("idPage", idPage);
+		request.setAttribute("nbPage", nbPage);
+		request.setAttribute("indLineMin", indLineMin);
+		request.setAttribute("indLineMax", indLineMax);
+		if(idPage<nbPage){
+			request.setAttribute("nextPage", idPage+1);
+		}else{
+			request.setAttribute("nextPage", -1);
+		}
+		
+		if(idPage>1){
+			request.setAttribute("lastPage", idPage-1);
+		}else{
+			request.setAttribute("lastPage", -1);
+		}
+		
+		
 		
 		request.getRequestDispatcher("dashboard.jsp").forward(request, response);
 	}
