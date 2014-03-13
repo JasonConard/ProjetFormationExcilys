@@ -2,29 +2,26 @@ package com.excilys.project.computerdatabase.domain;
 
 
 public class Company {
-	private long id;
-	private String name;
+	private final long id;
+	private final String name;
 	
-	public Company(long id, String name) {
+	/*public Company(long id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
+	}*/
+
+	public Company(CompanyBuilder companyBuilder) {
+		this.id = companyBuilder.id;
+        this.name = companyBuilder.name;
 	}
 
 	public long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 	@Override
@@ -55,4 +52,23 @@ public class Company {
 			return false;
 		return true;
 	}
+	
+	public static class CompanyBuilder {
+        private final long id;
+        private  String name;
+        
+        public CompanyBuilder(long id) {
+            this.id = id;
+        }
+        
+        public CompanyBuilder name(String name) {
+        	this.name = name;
+            return this;
+        }
+ 
+        public Company build() {
+            return new Company(this);
+        }
+ 
+    }
 }

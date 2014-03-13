@@ -1,14 +1,14 @@
 package com.excilys.project.computerdatabase.persistence;
-import java.sql.Connection;
+
 import java.sql.ResultSet;
+import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 import java.sql.PreparedStatement;
 
-import com.excilys.project.computerdatabase.domain.Company;
+import java.util.List;
+import java.util.ArrayList;
 
+import com.excilys.project.computerdatabase.domain.Company;
 
 public class CompanyDAO {
 	
@@ -16,54 +16,33 @@ public class CompanyDAO {
 	
 	public static CompanyDAO instance = null;
 	
-	public List<Company> selectAllCompany(){
+	public List<Company> retrieveAll(){
 		Connection con = ConnectionManager.getConnection();
 		
 		List<Company> alc = new ArrayList<Company>();
 		
 		String query = "SELECT * FROM "+table;
-		ResultSet results;
-		Statement stmt;
+		
+		ResultSet results = null;
+		PreparedStatement preparedStatement = null;
 		
 		try {
-			stmt = con.createStatement();
-			results = stmt.executeQuery(query);
+			preparedStatement = con.prepareStatement(query);
+			results = preparedStatement.executeQuery(query);
+			
 			while(results.next()){
 				long id = results.getLong("id");
 				String name = results.getString("name");
-				alc.add(new Company(id,name));
+				alc.add(new Company.CompanyBuilder(id).name(name).build());
 			}
-			results.close();
-			stmt.close();
+			
 		} catch (SQLException e) {
-			System.out.println("SQL query problem : "+query);
+			System.err.println("SQL query problem : "+query);
 		} finally{
-			try {
-				con.close();
-			} catch (SQLException e) {}
+			closeAll(results,preparedStatement,con);
 		}
 		
 		return alc;
-	}
-	
-	public void insertCompany(Company c){
-		Connection con = ConnectionManager.getConnection();
-		
-		String query = "INSERT INTO "+table+" VALUES(?,?)";
-		
-		try{
-			PreparedStatement ps = con.prepareStatement(query);
-			ps.setLong(1, c.getId());
-			ps.setString(2, c.getName());
-			ps.executeUpdate();
-			ps.close();
-		} catch (SQLException e) {
-			System.out.println("SQL query problem : "+query);
-		} finally{
-			try {
-				con.close();
-			} catch (SQLException e) {}
-		}
 	}
 	
 	public Company retrieveByCompanyId(long idCompany){
@@ -72,28 +51,65 @@ public class CompanyDAO {
 		Company company = null;
 		
 		String query = "SELECT ca.* FROM company AS ca WHERE ca.id = "+idCompany;
-		ResultSet results;
-		Statement stmt;
+		
+		ResultSet results = null;
+		PreparedStatement preparedStatement = null;
 		
 		try {
-			stmt = con.createStatement();
-			results = stmt.executeQuery(query);
+			preparedStatement = con.prepareStatement(query);
+			results = preparedStatement.executeQuery();
+			
 			if(results.next()){
 				long id = results.getLong("id");
 				String name = results.getString("name");
-				company = new Company(id,name);
+				company = new Company.CompanyBuilder(id).name(name).build();
 			}
-			results.close();
-			stmt.close();
+			
 		} catch (SQLException e) {
-			System.out.println("SQL query problem : "+query);
+			System.err.println("SQL query problem : "+query);
 		} finally{
-			try {
-				con.close();
-			} catch (SQLException e) {}
+			closeAll(results,preparedStatement,con);
 		}
 		
 		return company;
+	}
+	
+	public void insert(Company c){
+		Connection con = ConnectionManager.getConnection();
+		
+		String query = "INSERT INTO "+table+" VALUES(?,?)";
+		
+		PreparedStatement preparedStatement = null;
+		
+		try{
+			preparedStatement = con.prepareStatement(query);
+			
+			preparedStatement.setLong(1, c.getId());
+			preparedStatement.setString(2, c.getName());
+			
+			preparedStatement.executeUpdate();
+			
+		} catch (SQLException e) {
+			System.err.println("SQL query problem : "+query);
+		} finally{
+			closeAll(null,preparedStatement,con);
+		}
+	}
+	
+	private void closeAll(ResultSet rs,PreparedStatement ps, Connection cn){
+		try {
+			if(rs!=null){
+				rs.close();
+			}
+			if(ps!=null){
+				ps.close();
+			}
+			if(cn!=null){
+				cn.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	synchronized public static CompanyDAO getInstance(){

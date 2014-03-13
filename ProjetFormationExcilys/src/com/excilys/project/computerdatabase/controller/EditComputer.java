@@ -45,7 +45,7 @@ public class EditComputer extends HttpServlet {
 		}
 		
 		List<Company> allCompany = null;
-		allCompany = companyDao.selectAllCompany();
+		allCompany = companyDao.retrieveAll();
 		request.setAttribute("allCompany", allCompany);
 		request.getRequestDispatcher("editComputer.jsp").forward(request, response);
 	}
@@ -56,8 +56,9 @@ public class EditComputer extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Searching for all companies		
 		List<Company> allCompany = null;
-		allCompany = companyDao.selectAllCompany();
+		allCompany = companyDao.retrieveAll();
 		request.setAttribute("allCompany", allCompany);
+		
 		
 		// Parameters searching
 		String idString = request.getParameter("idComputer");
@@ -70,11 +71,14 @@ public class EditComputer extends HttpServlet {
 		Date discontinuedDate = null;
 		Company company = null;
 		
+		
+		/* Company searching by ID */
 		long companyId = Long.parseLong(companyIdString);
 		company = companyDao.retrieveByCompanyId(companyId);
 		
-		long id = Long.parseLong(idString);
 		
+		
+		/* Error searching */
 		String error = ""; 
 		if(introducedDateString!=null && introducedDateString.length()>0){
 			introducedDate = UsefulFunctions.stringToDate(introducedDateString);
@@ -88,23 +92,45 @@ public class EditComputer extends HttpServlet {
 				error += "Discontinued date is not correct ("+discontinuedDateString+")<br/>";
 			}
 		}
-		
-		if( name!=null && name.length()>0 ){
-			if(error.length()==0){
-				Computer computer = new Computer(id,name,introducedDate,discontinuedDate,company);
-				computerDao.updateComputer(computer);
-				String message = "Computer modified";
-				request.setAttribute("message", message);
-			}
-		}else{
+		if( name==null || name.length()==0 ){
 			error += "Computer name is required.";
 		}
+				
 		
+		/* Validation case */
+		if(error.length()==0){
+			long id = Long.parseLong(idString);
+			Computer computer = null;
+			if(company!=null){
+				computer = new Computer.ComputerBuilder(id, name)
+					.introduced(introducedDate)
+					.discontinued(discontinuedDate)
+					.company(
+						new Company.CompanyBuilder(company.getId())
+						.name(company.getName())
+						.build()
+					)
+					.build();
+			}else{
+				computer = new Computer.ComputerBuilder(id, name)
+					.introduced(introducedDate)
+		            .discontinued(discontinuedDate)
+		            .build();
+			}
+			computerDao.update(computer);
+			String message = "Computer modified";
+			request.setAttribute("message", message);
+		}
+		
+		
+		/* Error case */
 		if(error.length()>0){
 			request.setAttribute("error", error);
 		}
 		
-		if(idString != null && idString.length()>0){
+		
+		doGet(request,response);
+		/*if(idString != null && idString.length()>0){
 			long idRetrieve = Long.parseLong(idString);
 			Computer computer = computerDao.retrieveByComputerId(idRetrieve);
 			if(computer!=null){
@@ -112,7 +138,7 @@ public class EditComputer extends HttpServlet {
 			}
 		}
 		
-		request.getRequestDispatcher("editComputer.jsp").forward(request, response);
+		request.getRequestDispatcher("editComputer.jsp").forward(request, response);*/
 	}
 
 }

@@ -23,6 +23,7 @@ public class AddComputer extends HttpServlet {
        
 	CompanyDAO companyDao = CompanyDAO.getInstance();
 	ComputerDAO computerDao = ComputerDAO.getInstance();
+	
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -35,7 +36,7 @@ public class AddComputer extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Company> allCompany = null;
-		allCompany = companyDao.selectAllCompany();
+		allCompany = companyDao.retrieveAll();
 		request.setAttribute("allCompany", allCompany);
 		request.getRequestDispatcher("addComputer.jsp").forward(request, response);
 	}
@@ -44,6 +45,7 @@ public class AddComputer extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/* Parameters retrieving */
 		String name = request.getParameter("name");
 		String introducedDateString =  request.getParameter("introducedDate");
 		String discontinuedDateString =  request.getParameter("discontinuedDate");
@@ -53,44 +55,70 @@ public class AddComputer extends HttpServlet {
 		Date discontinuedDate = null;
 		Company company = null;
 		
+		
+		/* Company searching by ID */
 		long companyId = Long.parseLong(companyIdString);
 		company = companyDao.retrieveByCompanyId(companyId);
 		
+		
+		/* Error searching */
 		String error = ""; 
 		if(introducedDateString!=null && introducedDateString.length()>0){
 			introducedDate = UsefulFunctions.stringToDate(introducedDateString);
 			if(introducedDate == null){
-				error += "Introduced date is not correct ("+introducedDateString+")<br/>";
+				error += "Introduced date is not correct ("+introducedDateString+").<br/>";
 			}
 		}
 		if(discontinuedDateString!=null && discontinuedDateString.length()>0){
 			discontinuedDate = UsefulFunctions.stringToDate(discontinuedDateString);
 			if(introducedDate == null){
-				error += "Discontinued date is not correct ("+discontinuedDateString+")<br/>";
+				error += "Discontinued date is not correct ("+discontinuedDateString+").<br/>";
 			}
 		}
-		
-		if( name!=null && name.length()>0 ){
-			if(error.length()==0){
-				Computer computer = new Computer(0,name,introducedDate,discontinuedDate,company);
-				computerDao.insertComputer(computer);
-				String message = "Computer Added";
-				request.setAttribute("message", message);
-			}
-		}else{
-			error += "Computer name is required.";
-			
+		if( name==null || name.length()==0 ){
+			error += "Computer name is required.<br/>";
 		}
 		
+		
+		/* Validation case */
+		if(error.length()==0){
+			Computer computer = null;
+			if(company!=null){
+				computer = new Computer.ComputerBuilder(0, name)
+					.introduced(introducedDate)
+		            .discontinued(discontinuedDate)
+		            .company(
+		            		new Company.CompanyBuilder(company.getId())
+		            		.name(company.getName())
+		            		.build()
+		            		)
+		            .build();
+			}else{
+				computer = new Computer.ComputerBuilder(0, name)
+					.introduced(introducedDate)
+		            .discontinued(discontinuedDate)
+		            .build();
+			}
+			computerDao.insert(computer);
+			String message = "Computer Added";
+			request.setAttribute("message", message);
+		}
+		
+		
+		/* Error case */
 		if(error.length()>0){
 			request.setAttribute("error", error);
 		}
 		
-		List<Company> allCompanies = null;
+		
+		/* Loading AddComputer page */
+		doGet(request,response);
+		
+		/*List<Company> allCompanies = null;
 		allCompanies = companyDao.selectAllCompany();
 		request.setAttribute("allCompany", allCompanies);
 		
-		request.getRequestDispatcher("addComputer.jsp").forward(request, response);
+		request.getRequestDispatcher("addComputer.jsp").forward(request, response);*/
 	}
 
 }

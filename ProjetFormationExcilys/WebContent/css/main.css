@@ -63,15 +63,17 @@ table.computers .header a {
 }
 
 .col2 {
-	width: 50%;
+	width: 40%;
 }
 .col3, .col4 {
 	width: 10%;
 }
 .col5 {
-	width: 30%;
+	width: 20%;
 }
-
+.col6 {
+	width: 20%;
+}
 .date-form{
 	width: 200px;
 }

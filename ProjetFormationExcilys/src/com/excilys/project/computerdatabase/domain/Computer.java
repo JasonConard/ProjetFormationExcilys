@@ -3,15 +3,14 @@ package com.excilys.project.computerdatabase.domain;
 import java.util.Date;
 
 public class Computer {
-	private long id;
-	private String name;
-	private Date introduced;
-	private Date discontinued;
-	
-	private Company company = null;
-	
+	private final long id;
+	private final String name;
+	private final Date introduced;
+	private final Date discontinued;
+	private final Company company;
 
-	public Computer(long id, String name, Date introduced, Date discontinued,
+
+	/*public Computer(long id, String name, Date introduced, Date discontinued,
 			long companyId) {
 		super();
 		this.id = id;
@@ -19,10 +18,10 @@ public class Computer {
 		this.introduced = introduced;
 		this.discontinued = discontinued;
 		
-		company = new Company(companyId, "");
-	}
+		company = new Company.CompanyBuilder(companyId,"").build();
+	}*/
 	
-	public Computer(long id, String name, Date introduced, Date discontinued,
+	/*public Computer(long id, String name, Date introduced, Date discontinued,
 			long companyId, String companyName) {
 		super();
 		this.id = id;
@@ -30,10 +29,10 @@ public class Computer {
 		this.introduced = introduced;
 		this.discontinued = discontinued;
 		
-		company = new Company(companyId, companyName);
-	}
+		company = new Company.CompanyBuilder(companyId,companyName).build();
+	}*/
 	
-	public Computer(long id, String name, Date introduced, Date discontinued,
+	/*public Computer(long id, String name, Date introduced, Date discontinued,
 			Company company) {
 		super();
 		this.id = id;
@@ -41,47 +40,35 @@ public class Computer {
 		this.introduced = introduced;
 		this.discontinued = discontinued;
 		this.company = company;
-	}
+	}*/
 
+
+	public Computer(ComputerBuilder computerBuilder) {
+		this.id = computerBuilder.id;
+        this.name = computerBuilder.name;
+        this.introduced = computerBuilder.introduced;
+        this.discontinued = computerBuilder.discontinued;
+        this.company = computerBuilder.company;
+	}
 
 	public long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-
 	public String getName() {
 		return name;
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
+	
 	public Date getIntroduced() {
 		return introduced;
-	}
-
-	public void setIntroduced(Date introduced) {
-		this.introduced = introduced;
 	}
 
 	public Date getDiscontinued() {
 		return discontinued;
 	}
-
-	public void setDiscontinued(Date discontinued) {
-		this.discontinued = discontinued;
-	}
 	
 	public Company getCompany() {
 		return company;
-	}
-
-	public void setCompany(Company company) {
-		this.company = company;
 	}
 	
 	@Override
@@ -128,4 +115,37 @@ public class Computer {
 			return false;
 		return true;
 	}
+	
+	public static class ComputerBuilder {
+		private final long id;
+		private final String name;
+		private Date introduced;
+		private Date discontinued;
+		private Company company = null;
+        
+        public ComputerBuilder(long id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+        
+        public ComputerBuilder introduced(Date introduced) {
+            this.introduced = introduced;
+            return this;
+        }
+ 
+        public ComputerBuilder discontinued(Date discontinued) {
+            this.discontinued = discontinued;
+            return this;
+        }
+ 
+        public ComputerBuilder company(Company company) {
+            this.company = company;
+            return this;
+        }
+ 
+        public Computer build() {
+            return new Computer(this);
+        }
+ 
+    }
 }

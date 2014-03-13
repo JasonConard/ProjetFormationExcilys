@@ -18,6 +18,8 @@ public class DashBoard extends HttpServlet {
 
 	ComputerDAO computerDao = ComputerDAO.getInstance();
 	
+	public static final int NBLINEPERPAGES = 10;
+	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -29,6 +31,7 @@ public class DashBoard extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+		
 		/* Deleting managment */
 		String idString = request.getParameter("computerId");
 		String delete = request.getParameter("delete");
@@ -37,8 +40,11 @@ public class DashBoard extends HttpServlet {
 			computerDao.delete(id);
 		}
 		
+		
+		/* Order By managment */
 		String order = request.getParameter("order");
-		String visibleOrder = order;
+		String visibleOrder = order; // The order parameter visible by client
+		
 		if(order == null || order.length()==0){
 			order = "cu.name";
 			visibleOrder = "name";
@@ -47,17 +53,20 @@ public class DashBoard extends HttpServlet {
 		}else{
 			order = "cu."+order;
 		}
-		request.setAttribute("order", visibleOrder);
+		
 		String dir = request.getParameter("dir");
 		if(dir == null || dir.length()==0){
-			dir = "DESC";
+			dir = "ASC";
 		}
+		
+		request.setAttribute("order", visibleOrder);
 		request.setAttribute("dir", dir);
 		
 		
 		/* Searching managment */
 		String search = request.getParameter("search");
 		List<Computer> allComputer = null;
+		
 		if(search == null || search.length()==0){
 			allComputer = computerDao.retrieveAllWithCompanyNameOrderBy(order, dir);
 			request.setAttribute("search", "");
@@ -65,33 +74,37 @@ public class DashBoard extends HttpServlet {
 			allComputer = computerDao.retrieveAllWithCompanyNameLikeOrder(search, order, dir);
 			request.setAttribute("search", search);
 		}
-		//System.out.println(allComputer);
+		
 		request.setAttribute("allComputer", allComputer);
 		request.setAttribute("nbComputer", allComputer.size());
 		
 		
-		
+		/* Pagination managment */
 		String idPageString = request.getParameter("page");
+		
 		int idPage = 1;
+		
 		if(idPageString != null && idPageString.length() != 0){
 			idPage = Integer.parseInt(idPageString);
+			if(idPage<1){
+				idPage = 1;
+			}
 		}
 		
-		int nbLinePerPages = 30;
-		int nbPage = allComputer.size()/nbLinePerPages +1;
-		int indLineMin = (idPage-1)*nbLinePerPages;
-		int indLineMax = indLineMin+nbLinePerPages-1;
+		int nbPage = allComputer.size()/NBLINEPERPAGES +1;
+		int indLineMin = (idPage-1)*NBLINEPERPAGES;
+		int indLineMax = indLineMin+NBLINEPERPAGES-1;
 		
 		request.setAttribute("idPage", idPage);
 		request.setAttribute("nbPage", nbPage);
 		request.setAttribute("indLineMin", indLineMin);
 		request.setAttribute("indLineMax", indLineMax);
+		
 		if(idPage<nbPage){
 			request.setAttribute("nextPage", idPage+1);
 		}else{
 			request.setAttribute("nextPage", -1);
 		}
-		
 		if(idPage>1){
 			request.setAttribute("lastPage", idPage-1);
 		}else{
@@ -99,7 +112,7 @@ public class DashBoard extends HttpServlet {
 		}
 		
 		
-		
+		/* Redirection */
 		request.getRequestDispatcher("dashboard.jsp").forward(request, response);
 	}
 }

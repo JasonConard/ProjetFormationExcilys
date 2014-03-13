@@ -12,6 +12,7 @@ public class ConnectionManager {
 	
 	public static Connection getConnection(){
 		
+		/* Load jdbc driver one only time */
 		if(firstUsing){
 			try {
 				Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -22,6 +23,7 @@ public class ConnectionManager {
 			}
 		}
 		
+		/* Searching for connection */
 		Connection conn = null;
 		
 		try {
